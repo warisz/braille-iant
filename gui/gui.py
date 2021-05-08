@@ -10,13 +10,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
-
-
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
-        Dialog.setObjectName("Dialog")
-        Dialog.resize(829, 628)
+
 
         self.current_braille = ""
         self.braille_dict = {
@@ -50,21 +46,20 @@ class Ui_Dialog(object):
             '\n': '\n'
         }
 
-
+        Dialog.setObjectName("Dialog")
+        Dialog.resize(1200, 900)
         self.textEdit = QtWidgets.QTextEdit(Dialog)
-        self.textEdit.setGeometry(QtCore.QRect(120, 100, 571, 201))
+        self.textEdit.setGeometry(QtCore.QRect(100, 100, 1000, 350))
         self.textEdit.setObjectName("textEdit")
-        self.label = QtWidgets.QLabel(Dialog)
-        self.label.setGeometry(QtCore.QRect(370, 370, 47, 16))
-        self.label.setObjectName("label")
         self.printbutton = QtWidgets.QPushButton(Dialog)
-        self.printbutton.setGeometry(QtCore.QRect(230, 470, 151, 41))
+        self.printbutton.setGeometry(QtCore.QRect(425, 800, 151, 41))
         self.printbutton.setObjectName("printbutton")
         self.cancelbutton = QtWidgets.QPushButton(Dialog)
-        self.cancelbutton.setGeometry(QtCore.QRect(400, 470, 151, 41))
+        self.cancelbutton.setGeometry(QtCore.QRect(625, 800, 151, 41))
+        self.cancelbutton.setAutoFillBackground(False)
         self.cancelbutton.setObjectName("cancelbutton")
         self.label_2 = QtWidgets.QLabel(Dialog)
-        self.label_2.setGeometry(QtCore.QRect(120, 70, 131, 16))
+        self.label_2.setGeometry(QtCore.QRect(100, 40, 131, 50))
         font = QtGui.QFont()
         font.setFamily("Yu Gothic UI Semibold")
         font.setPointSize(12)
@@ -72,6 +67,14 @@ class Ui_Dialog(object):
         font.setWeight(75)
         self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
+        self.groupBox = QtWidgets.QGroupBox(Dialog)
+        self.groupBox.setGeometry(QtCore.QRect(100, 500, 1000, 250))
+        self.groupBox.setTitle("")
+        self.groupBox.setObjectName("groupBox")
+        self.label = QtWidgets.QLabel(self.groupBox)
+        self.label.setGeometry(QtCore.QRect(0, 0, 47, 16))
+        self.label.setText("")
+        self.label.setObjectName("label")
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -81,7 +84,7 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Braille-iant", "Braille-iant"))
-        self.label.setText(_translate("Dialog", "Braille"))
+        self.label.setText(_translate("Dialog", ""))
         self.printbutton.setText(_translate("Dialog", "PRINT"))
         self.cancelbutton.setText(_translate("Dialog", "CANCEL"))
         self.label_2.setText(_translate("Dialog", "Enter Text:"))
@@ -91,10 +94,13 @@ class Ui_Dialog(object):
         self.label.adjustSize()
 
     def update_braille(self):
-        self.current_braille = " "
+        self.current_braille = " " 
         print(str(self.textEdit.toPlainText()))
         for char in str(self.textEdit.toPlainText()):
             self.current_braille = self.current_braille + self.braille_dict[char]
+            if len(self.current_braille) % 83 == 0:
+                self.current_braille = self.current_braille + "\n"
+            
         self.label.setText(self.current_braille)
         self.label.adjustSize()
 
