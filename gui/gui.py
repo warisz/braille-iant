@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import serial
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -45,6 +46,7 @@ class Ui_Dialog(object):
             'z': '⠵',
             '\n': '\n'
         }
+        self.ser = serial.Serial(port='COM4', baudrate = 9600)
 
         Dialog.setObjectName("Dialog")
         Dialog.resize(1200, 900)
@@ -79,7 +81,7 @@ class Ui_Dialog(object):
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
-        self.printbutton.clicked.connect(lambda: self.printbutton_clicked("Printed clicked"))
+        self.printbutton.clicked.connect(self.printbutton_clicked)
         self.textEdit.textChanged.connect(self.update_braille)
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
@@ -89,12 +91,12 @@ class Ui_Dialog(object):
         self.cancelbutton.setText(_translate("Dialog", "CANCEL"))
         self.label_2.setText(_translate("Dialog", "Enter Text:"))
 
-    def printbutton_clicked(self, text):
-        self.label.setText(text)
-        self.label.adjustSize()
+    def printbutton_clicked(self):
+        for char in str(self.textEdit.toPlainText()):
+            ser.write(char.encode())
 
     def update_braille(self):
-        self.current_braille = " " 
+        self.current_braille = " "
         print(str(self.textEdit.toPlainText()))
         for char in str(self.textEdit.toPlainText()):
             self.current_braille = self.current_braille + self.braille_dict[char]
